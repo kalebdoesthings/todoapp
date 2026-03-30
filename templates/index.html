@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Todo</title>
+</head>
+<body>
+    
+<nav>
+    <ul class="mainnav"></ul>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+<script src="{{ url_for('static', filename='js/tasks/archiveTask.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tasks/restoreTask.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ui/archiveDivConstructor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/api/dataFetch.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ui/navConstructor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ui/tabSwitcher.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tasks/addTasks.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tasks/removeTask.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tasks/addTaskForm.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ui/divConstructor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/appInit.js') }}"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".column ul").forEach(ul => {
+        new Sortable(ul, {
+            animation: 150,
+            ghostClass: "ghost",
+            chosenClass: "chosen",
+            group: "shared",
+            onEnd: async function(evt) {
+                const taskId = evt.item.dataset.taskId;
+                const parts = evt.to.closest(".column").id.split("-");
+                const newStatus = parts[parts.length - 1];
+                const currentCategory = localStorage.getItem("active")
+                await fetch(`/api/tasks/${taskId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                addTasksToColumn(currentCategory)
+
+                
+            }
+        });
+    });
+});
+</script>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+    const socket = io();
+socket.on('task_updated', (data) => {
+    addTasksToColumn(data.category)
+});
+
+socket.on('task_deleted', (data) => {
+    addTasksToColumn(data.category)
+})
+
+socket.on('archive_updated', () => {
+    refreshArchive()
+})
+
+</script>
+
+</body>
+</html>
