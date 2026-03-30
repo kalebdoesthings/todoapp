@@ -1,0 +1,72 @@
+@media (max-width: 768px) {
+  nav {
+    padding: 0.75em 1em;
+  }
+
+  nav .mainnavelement {
+    font-size: 1rem;
+    padding: 0 0.3em 0.1em;
+  }
+
+  .section {
+    padding: 0.75em;
+  }
+
+  .columns {
+    flex-direction: column;
+    padding: 0.5em;
+    gap: 0.75em;
+  }
+
+  .column {
+    max-height: 40vh;
+  }
+
+  .column li {
+    font-size: 3.5vw;
+  }
+
+  .column li p {
+    font-size: 3vw;
+  }
+
+  .archive-item {
+    font-size: 3.5vw;
+  }
+
+  .archive-item p {
+    font-size: 3vw;
+  }
+
+  .addTask {
+    width: 90vw;
+    height: auto;
+    padding: 1.5em;
+  }
+
+  .addTask h1 {
+    font-size: 1.3rem;
+  }
+
+  .addTask label,
+  .addTask input,
+  .addTask textarea,
+  .addTask button {
+    width: 100%;
+  }
+
+  .trash {
+    width: 24px;
+    height: 24px;
+  }
+
+  .archive {
+    width: 24px;
+    height: 24px;
+  }
+
+  .restore {
+    width: 24px;
+    height: 24px;
+  }
+}
